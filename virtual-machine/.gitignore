@@ -1,0 +1,7 @@
+*.tfstate
+*.tfstate.*
+*.terraform
+# *.tfstate.backup
+terraform-azure.pem
+.DS_Store
+
