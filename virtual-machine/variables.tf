@@ -38,6 +38,10 @@ variable "subnet_security_groups" {
 }
 
 # Public IP
+variable "pub_ip_name" {
+  description = "Names of web and jump host public ip address"
+  type = list(string)
+}
 variable "pub_ip" {
   description = "Public ip for the web server"
   type        = map(string)
