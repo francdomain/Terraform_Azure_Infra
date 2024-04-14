@@ -28,8 +28,9 @@ subnet_security_groups = {
     "jumphostsubnet" = "jumphost_sg"
   }
 
+  pub_ip_name = ["web-pubip", "jumphost-pubip"]
+
 pub_ip = {
-  name              = "webip"
   allocation_method = "Static"
   sku               = "Standard"
 }
@@ -52,6 +53,7 @@ nics = {
   webnic = {
     name   = "web-nic"
     subnet = "websubnet"
+    pub_ip = "web-pubip"
   }
   appnic = {
     name   = "app-nic"
@@ -64,6 +66,7 @@ nics = {
   jumphostnic = {
     name   = "jumphost-nic"
     subnet = "jumphostsubnet"
+    pub_ip = "jumphost-pubip"
   }
 }
 

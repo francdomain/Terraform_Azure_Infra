@@ -38,5 +38,27 @@ chmod 400 terraform-azure.pem
 
 The image below shows the architecture diagram for the various servsers.
 
-![Virtual Machine design](../images/4-tier-vm-design.png)
+![Virtual Machine design](../images/4-tier-design-vm.png)
+
+### Connect to Jump Host linux VM
+
+1. Connect to Jump Host Linux VM
+```
+ssh -i ssh-keys/terraform-azure.pem azureuser@<Jump-Host-LinuxVM-PublicIP>
+cd /tmp
+ls
+```
+2. terraform-azure.pem file should be present in /tmp directory
+
+### Connect to Web Linux VM using Bastion Host VM
+1. Connect to Web Linux VM
+```
+ssh -i ssh-keys/terraform-azure.pem azureuser@<Web-LinuxVM-PrivateIP>
+cd /var/log
+sudo tail -100f cloud-init-output.log
+cd /var/www/html
+ls -la
+cd /var/www/html/app1
+ls -la
+```
 

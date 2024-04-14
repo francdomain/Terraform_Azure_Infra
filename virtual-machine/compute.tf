@@ -1,10 +1,11 @@
 # Public ip address
-resource "azurerm_public_ip" "web_pubip" {
-  name                = var.pub_ip.name
+resource "azurerm_public_ip" "pubip" {
+  for_each            = toset(var.pub_ip_name)
+  name                = each.value
   location            = azurerm_resource_group.main.location
   resource_group_name = azurerm_resource_group.main.name
-  allocation_method   = var.pub_ip.allocation_method
-  sku                 = var.pub_ip.sku
+  allocation_method   = var.pub_ip["allocation_method"]
+  sku                 = var.pub_ip["sku"]
 }
 
 # Network interface card
@@ -18,7 +19,7 @@ resource "azurerm_network_interface" "nic" {
     name                          = var.vm_details["ip-config-name"]
     subnet_id                     = azurerm_subnet.subnet[each.value.subnet].id
     private_ip_address_allocation = var.vm_details["private-ip-alloc"]
-    public_ip_address_id          = each.value.name == "web-nic" ? azurerm_public_ip.web_pubip.id : null
+    public_ip_address_id = each.value.name == "web-nic" || each.value.name == "jumphost-nic" ? azurerm_public_ip.pubip[each.value.pub_ip].id : null
   }
 }
 
