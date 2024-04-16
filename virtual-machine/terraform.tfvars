@@ -93,4 +93,10 @@ vms = {
   }
 }
 
+vm_extension = {
+  name                 = "cp-privatekey-to-jumphost"
+  publisher            = "Microsoft.Azure.Extensions"
+  type                 = "CustomScript"
+  type_handler_version = "2.1"
+}
 

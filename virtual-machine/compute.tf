@@ -24,7 +24,7 @@ resource "azurerm_network_interface" "nic" {
 }
 
 # Linux virtual machine
-resource "azurerm_linux_virtual_machine" "linuxvm" {
+resource "azurerm_linux_virtual_machine" "main" {
   for_each            = var.vms
   name                = "${local.resource_name_prefix}-${each.value.name}"
   resource_group_name = azurerm_resource_group.main.name
@@ -52,4 +52,31 @@ resource "azurerm_linux_virtual_machine" "linuxvm" {
     version   = var.vm_details["version"]
   }
   custom_data = filebase64("${path.module}/scripts/redhat-webvm-script.sh")
+  tags        = local.common_tags
 }
+
+# Null Resource and Provisioners
+resource "null_resource" "copy_ssh_key_to_jumphost" {
+  for_each = { for k, vm in var.vms : k => vm if k == "jumphostvm" }
+  connection {
+    type = "ssh"
+    host = azurerm_linux_virtual_machine.main[each.key].public_ip_address
+    user = azurerm_linux_virtual_machine.main[each.key].admin_username
+    private_key = file("${path.module}/ssh-keys/terraform-azure.pem")
+  }
+  provisioner "file" {
+    source = "ssh-keys/terraform-azure.pem"
+    destination = "/tmp/terraform-azure.pem"
+  }
+  provisioner "remote-exec" {
+    inline = [
+      "sudo chmod 400 /tmp/terraform-azure.pem"
+    ]
+  }
+  depends_on = [
+    azurerm_linux_virtual_machine.main
+  ]
+}
+
+
+
