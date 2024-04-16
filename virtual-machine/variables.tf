@@ -72,4 +72,9 @@ variable "vm_details" {
   type = map(string)
 }
 
+variable "vm_extension" {
+  description = "Virtual machine extension to copy ssh private key file to jump host"
+  type = map
+}
+
 

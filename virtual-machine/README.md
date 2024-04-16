@@ -48,7 +48,8 @@ ssh -i ssh-keys/terraform-azure.pem azureuser@<Jump-Host-LinuxVM-PublicIP>
 cd /tmp
 ls
 ```
-2. terraform-azure.pem file should be present in /tmp directory
+2. Use null resource and provisioner to copy the ssh private key file from local source to the jump host VM.
+terraform-azure.pem file will be present in /tmp directory of the jump host
 
 ### Connect to Web Linux VM using Bastion Host VM
 1. Connect to Web Linux VM
